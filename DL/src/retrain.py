@@ -33,7 +33,7 @@ def train_system_pipeline(csv_path, model_dir):
     os.makedirs(model_dir, exist_ok=True)
     joblib.dump(le, f"{model_dir}/label_encoder.pkl")
     
-    print("Extracting features (TF-IDF + Semantic Vectors 384-dim)...")
+    print("Extracting features (TF-IDF + Semantic Vectors 768-dim)...")
     tfidf = TfidfVectorizer(max_features=2000, ngram_range=(1, 2))
     tfidf_features = tfidf.fit_transform(df['clean_text']).toarray()
     joblib.dump(tfidf, f"{model_dir}/tfidf_vectorizer.pkl")
