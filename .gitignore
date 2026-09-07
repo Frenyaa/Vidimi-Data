@@ -1,0 +1,28 @@
+# Environments
+venv/
+env/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Data and Models
+*.csv
+*.xlsx
+*.pkl
+*.pth
+*.h5
+*.model
+*.json
+!DL/config/keywords.json
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Output logs
+*.log

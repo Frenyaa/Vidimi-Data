@@ -1,0 +1,10 @@
+sentence-transformers
+xgboost
+scikit-learn
+pandas
+numpy
+tqdm
+underthesea
+pyvi
+modAL-python
+modAL
