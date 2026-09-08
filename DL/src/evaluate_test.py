@@ -2,7 +2,7 @@ import pandas as pd
 from classify import FoodClassifierPipeline
 
 print("Loading Hybrid Classifier...")
-clf = FoodClassifierPipeline(config_path="../config/keywords.json", model_dir="../models")
+clf = FoodClassifierPipeline(config_path="../config/keywords.json", model_dir="../data/model")
 
 df = pd.read_excel('/Users/buidoanhaiyen/Documents/Vidimi/Code/6. Data/test.xlsx')
 

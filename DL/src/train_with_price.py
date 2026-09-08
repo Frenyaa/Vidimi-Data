@@ -29,18 +29,21 @@ def train_with_price(csv_path, keywords_path, model_dir):
         keywords = json.load(f)
         
     import re
-    compiled_rules = {}
+    all_keywords = []
     for cat, kws in keywords.items():
-        if not kws: continue
-        kws_escaped = [re.escape(kw.lower()) for kw in kws]
-        pattern = r'(?:\b|^|\s)(' + '|'.join(kws_escaped) + r')(?:\b|$|\s)'
-        compiled_rules[cat] = re.compile(pattern)
+        for kw in kws:
+            kw_lower = kw.lower()
+            pattern = re.compile(r'(?:\b|^|\s)' + re.escape(kw_lower) + r'(?:\b|$|\s)')
+            all_keywords.append((kw_lower, pattern, cat))
+    
+    # Sort by length descending
+    all_keywords.sort(key=lambda x: len(x[0]), reverse=True)
 
     def rule_based_label(row):
         text = str(row['Item Name']).lower()
         clean = str(row['clean_text'])
-        for cat, compiled_regex in compiled_rules.items():
-            if compiled_regex.search(text) or compiled_regex.search(clean):
+        for kw_lower, pattern, cat in all_keywords:
+            if pattern.search(text) or pattern.search(clean):
                 return cat
         return "UNKNOWN"
         
@@ -68,12 +71,10 @@ def train_with_price(csv_path, keywords_path, model_dir):
     encoder = SentenceTransformer('keepitreal/vietnamese-sbert')
     semantic_features = encoder.encode(train_df['clean_text'].tolist(), show_progress_bar=True)
     
-    price_feature = train_df['Price'].values.reshape(-1, 1)
+    # Hợp nhất: TF-IDF (2000) + Semantic (768)
+    X = np.hstack((tfidf_features, semantic_features))
     
-    # Hợp nhất: TF-IDF (2000) + Semantic (384) + Price (1)
-    X = np.hstack((tfidf_features, semantic_features, price_feature))
-    
-    print("Training Hybrid XGBoost with PRICE feature...")
+    print("Training Hybrid XGBoost WITHOUT PRICE feature...")
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, stratify=y)
     
     # [OPTIMIZATION] n_jobs=-1 uses all CPU cores. tree_method='hist' is 10x faster for large datasets.

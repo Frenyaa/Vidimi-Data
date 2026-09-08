@@ -106,11 +106,13 @@ class FoodClassifierPipeline:
             
         if self.has_ml_model:
             tfidf_vec = self.tfidf.transform([clean_text]).toarray()
-            price_arr = np.array([[float(price)]])
-            combined_vec = np.hstack((tfidf_vec, [text_vector], price_arr))
+            combined_vec = np.hstack((tfidf_vec, [text_vector]))
             probs = self.xgb_model.predict_proba(combined_vec)[0]
             pred_idx = np.argmax(probs)
-            return self.label_encoder.inverse_transform([pred_idx])[0], f"3. Hybrid XGBoost (Prob: {probs[pred_idx]:.2f})", clean_text
+            max_prob = probs[pred_idx]
+            if max_prob < 0.40:
+                return "UNKNOWN_NEEDS_REVIEW", f"LOW_CONFIDENCE (Prob: {max_prob:.2f})", clean_text
+            return self.label_encoder.inverse_transform([pred_idx])[0], f"3. Hybrid XGBoost (Prob: {max_prob:.2f})", clean_text
             
         return "UNKNOWN_OTHER", f"LOW_CONFIDENCE (Max Sim: {max_sim:.2f})", clean_text
 
@@ -139,8 +141,7 @@ class FoodClassifierPipeline:
             # 4. Semantic and XGBoost for unresolved
             if self.has_ml_model:
                 tfidf_vecs = self.tfidf.transform(unresolved_texts).toarray()
-                prices_arr = np.array([[float(prices[i])] for i in unresolved_idx])
-                combined_vecs = np.hstack((tfidf_vecs, embeddings, prices_arr))
+                combined_vecs = np.hstack((tfidf_vecs, embeddings))
                 probs_batch = self.xgb_model.predict_proba(combined_vecs)
                 preds = np.argmax(probs_batch, axis=1)
                 labels = self.label_encoder.inverse_transform(preds)
@@ -158,8 +159,12 @@ class FoodClassifierPipeline:
                     results[global_i]["method"] = f"2. Semantic Match (Sim: {max_sim:.2f})"
                 elif self.has_ml_model:
                     prob = probs_batch[local_i][preds[local_i]]
-                    results[global_i]["cat"] = labels[local_i]
-                    results[global_i]["method"] = f"3. Hybrid XGBoost (Prob: {prob:.2f})"
+                    if prob < 0.40:
+                        results[global_i]["cat"] = "UNKNOWN_NEEDS_REVIEW"
+                        results[global_i]["method"] = f"LOW_CONFIDENCE (Prob: {prob:.2f})"
+                    else:
+                        results[global_i]["cat"] = labels[local_i]
+                        results[global_i]["method"] = f"3. Hybrid XGBoost (Prob: {prob:.2f})"
                 else:
                     results[global_i]["cat"] = "UNKNOWN_OTHER"
                     results[global_i]["method"] = f"LOW_CONFIDENCE (Max Sim: {max_sim:.2f})"
