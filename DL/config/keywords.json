@@ -83,7 +83,9 @@
     "pepsi",
     "có ga",
     "sprite",
-    "7up"
+    "7up",
+    "Ly Nước tiNi (ấy sual)",
+    "T3 Goodmood - Nuoc uong"
   ],
   "BEV_TANG_LUC": [
     "bò h́c",
@@ -143,7 +145,9 @@
     "s̛̃a dậ",
     "sua tuoi",
     "ovaltine",
-    "sa toi"
+    "sa toi",
+    "Sữa bắp ngô LOF 180ml",
+    "ENSURE TPDĐYH dạng lỏng h.vani 237ml"
   ],
   "BEV_NUOC_EP": [
     "ép cam",
@@ -165,7 +169,8 @@
     "nước mía",
     "n̛ớc ép",
     "d̛̀a xiêm",
-    "noc ep"
+    "noc ep",
+    "Nước Chanh xí muội (M)"
   ],
   "BEV_SINH_TO": [
     "sinh tố",
@@ -329,7 +334,8 @@
     "trứng",
     "tŕ̛ng lòng dào",
     "ghẹ",
-    "ṃ̛c"
+    "ṃ̛c",
+    "Ech chien nuoc mam"
   ],
   "FOOD_AN_SAN": [
     "nggets",
@@ -429,7 +435,10 @@
     "t̛ơng ớt",
     "kim chi",
     "sốt",
-    "bột ngọt"
+    "bột ngọt",
+    "Nuoc cot dừa AOV chai 350ml/50",
+    "Wonderfarm Nước Cốt Dừa 400ml / Wonderfarm Coconut Cream 400ml",
+    "Nuoc mam sau dinh san Omega 100ml"
   ],
   "FOOD_OTHER": [
     "dầu gội",
@@ -464,5 +473,16 @@
     "khăn lạnh",
     "vat",
     "hộp mang về"
+  ],
+  "UNKNOWN_OTHER": [
+    "Rosepire 3MG/0.02MG Exeltis 1x28",
+    "Oresol plus",
+    "Xịt miệng",
+    "Nuoc C-vitt vitamin o",
+    "Rosepire 3MG/0.03MG Exeltis 1x28",
+    "Item 6",
+    "AMLOR TAB 5MG",
+    "T3. Thức uống bổ sung ion",
+    "EMANERA 20mg"
   ]
 }
