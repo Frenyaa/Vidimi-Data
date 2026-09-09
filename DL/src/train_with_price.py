@@ -63,8 +63,8 @@ def train_with_price(csv_path, keywords_path, model_dir):
     os.makedirs(model_dir, exist_ok=True)
     joblib.dump(le, f"{model_dir}/label_encoder.pkl")
     
-    print("Extracting features (TF-IDF + Semantic Vectors + Price)...")
-    tfidf = TfidfVectorizer(max_features=500, ngram_range=(1, 2))
+    print("Extracting features (TF-IDF Character N-Grams + Semantic Vectors)...")
+    tfidf = TfidfVectorizer(max_features=2000, analyzer='char_wb', ngram_range=(2, 4))
     tfidf_features = tfidf.fit_transform(train_df['clean_text']).toarray()
     joblib.dump(tfidf, f"{model_dir}/tfidf_vectorizer.pkl")
     
